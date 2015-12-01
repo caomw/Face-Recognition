@@ -64,7 +64,8 @@ function [ image_name , file_name ] = readValidFiles( path )
         end
         
         % Inform which file .txt was not found
-        fprintf( 2, cat( 2, cat( 2, tmp_file_name , ' not found' ), '\n' ) ); 
+        tmp_file_name = strsplit( images{ i } , '.' );
+        fprintf( 2, cat( 2, cat( 2, strcat( tmp_file_name{1} , '.txt' ) , ' not found' ), '\n' ) ); 
     end
     
     % Sort names
