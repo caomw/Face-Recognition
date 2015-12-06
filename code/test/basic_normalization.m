@@ -1,3 +1,7 @@
+
+
+
+
 %% Read Images
 
 %!! Eric, I think you can only change this first part, reading all the images and txt in files,
@@ -7,10 +11,22 @@
 %Finally, I save all the mapped images to files mapped_images.
 
 
+
+% creation of the "mapped_images" have to be checked
+
 clear all;
 clc;
+
+
 folder = '../all_faces/';
-num = 5;% number of images
+num = 5;% number of images                                                          %not all people have 5 valid images !!!
+
+
+
+% All features are saved in the same structure.
+% Such structure has 1 row and C columns
+% C number is the sum of ( persons x images )
+% Number of images found, an extra vector can be used [ 5 5 5 5 3 5 5 ] ?
 for i = 1 : num
     baseFileName = sprintf('Songyou_%d.txt', i);
     fullFileName = fullfile(folder, baseFileName);
@@ -47,16 +63,25 @@ for i = 1 : num
     image{i + 2*num} = imread(fullImageName);
 end
 
+
+
+
+
+
+
+
+
 num = 3*num;
 
 
 %% Compute the first transformation (average locations)
+% Predetermined locations
 p1 = [13;20];
 p2 = [50;20];
 p3 = [34;34]; 
 p4 = [16;50];
 p5 = [48;50];
-Fp = [p1,p2,p3,p4,p5];%predetermined locations
+Fp = [p1,p2,p3,p4,p5];
 
 % Compute the first average locations, which at first is the first images
 b_tmp = reshape(Fp, [10,1]);%store b in Ax = b
