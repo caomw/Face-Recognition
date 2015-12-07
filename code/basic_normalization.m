@@ -150,25 +150,25 @@ display(F_average);
 
 % Compute the inverse transformation
 
-mapped_path = '../mapped_images/';
-for k = 1 : num
-    
-    new = zeros(64,64,3);
-    for i = 1 : 64
-        for j = 1 : 64
-            f = A{k} \ ([i;j] - b{k});% inverse version
-            if f(1) <= 1 || f(2) <= 1 || f(1) > size(image{k},2) || f(2) > size(image{k},1)
-                continue;
-            else
-                f(1) = floor(f(1));
-                f(2) = floor(f(2));
-                new(j, i, 1) = image{k}(f(2), f(1), 1);
-                new(j, i, 2) = image{k}(f(2), f(1), 2);
-                new(j, i, 3) = image{k}(f(2), f(1), 3);
-            end
-        end
-    end
-    base = sprintf('%d.jpg', k);
-    imwrite(uint8(new), fullfile(mapped_path, base));   
-end
+% mapped_path = '../mapped_images/';
+% for k = 1 : num
+%     
+%     new = zeros(64,64,3);
+%     for i = 1 : 64
+%         for j = 1 : 64
+%             f = A{k} \ ([i;j] - b{k});% inverse version
+%             if f(1) <= 1 || f(2) <= 1 || f(1) > size(image{k},2) || f(2) > size(image{k},1)
+%                 continue;
+%             else
+%                 f(1) = floor(f(1));
+%                 f(2) = floor(f(2));
+%                 new(j, i, 1) = image{k}(f(2), f(1), 1);
+%                 new(j, i, 2) = image{k}(f(2), f(1), 2);
+%                 new(j, i, 3) = image{k}(f(2), f(1), 3);
+%             end
+%         end
+%     end
+%     base = sprintf('%d.jpg', k);
+%     imwrite(uint8(new), fullfile(mapped_path, base));   
+% end
 
