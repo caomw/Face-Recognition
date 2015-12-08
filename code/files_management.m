@@ -1,12 +1,39 @@
 function f = files_management
+    f.createValidDataStructure = @createValidDataStructure;
     f.readValidFiles = @readValidFiles;
     f.checkData = @checkData;
+    
+    f.checkRawDispersity = @checkRawDispersity;
 end
 
 
 % PUBLIC
 % ********************************************************************* %
 % ********************************************************************* %
+
+function [ data , images ] = createValidDataStructure( folder )
+    
+    % Check valid files
+    [ image_name , file_name ] = readValidFiles( folder );
+    
+    % Save valid data in a structure
+    for i = 1:1:size( file_name , 2 )
+        
+        fullFileName = fullfile( folder , file_name{i} );
+        fileID = fopen( fullFileName , 'r' );
+        
+        % Change these two lines for dlmread ??
+        F{i} = fscanf( fileID , '%u' );%This is the positions for features in real images, 10*1
+        F{i} = reshape(F{i}, [2,5]);% reshape to 2*5
+
+        fullImageName = fullfile( folder , image_name{i} );
+        I{i} = imread(fullImageName);
+  
+    end
+    data = F;
+    images = I;
+end
+
 
 function [ image_name , file_name ] = readValidFiles( path )
     
@@ -81,7 +108,7 @@ end
 function c = checkData( path )
     
     % Clear workspace
-    clearAll();
+    %clearAll();
 
     % Read valid files in path
     [ image_name , file_name ] = readValidFiles( path );
@@ -111,6 +138,35 @@ function c = checkData( path )
         e = e + 1;
     end
 end
+
+
+function c = checkRawDispersity( path )
+    
+    % Clear workspace
+    %clearAll();
+
+    % Read valid files in path
+    [ image_name , file_name ] = readValidFiles( path );
+
+    % Display dispersity of the raw data
+    figure;
+    for f = 1:1:size( image_name , 2 )
+        try
+            file = dlmread( strcat( path , file_name{ f } ) );
+            
+            %subplot( 4 , 5 , e ); imshow( strcat( path , image_name{ f } ) ); hold on;
+            plot( file( 1 , 1 ) , file( 1 , 2 ) , 'r*' , 'MarkerSize' , 2 ); hold on;
+            plot( file( 2 , 1 ) , file( 2 , 2 ) , 'g*' , 'MarkerSize' , 2 ); hold on;
+            plot( file( 3 , 1 ) , file( 3 , 2 ) , 'b*' , 'MarkerSize' , 2 ); hold on;
+            plot( file( 4 , 1 ) , file( 4 , 2 ) , 'm*' , 'MarkerSize' , 2 ); hold on;
+            plot( file( 5 , 1 ) , file( 5 , 2 ) , 'y*' , 'MarkerSize' , 2 ); hold on;
+        catch
+            fprintf( 2, cat( 2, cat( 2, 'Error representing ', file_name{f} ), '\n' ) );
+        end
+    end
+    hold off;
+end
+
 
 
 % PRIVATE
