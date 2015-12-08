@@ -11,11 +11,11 @@ end
 % ********************************************************************* %
 % ********************************************************************* %
 
-function [ data , images ] = createValidDataStructure( folder )
-    
+function [ data , images , image_name ] = createValidDataStructure( folder )
+
     % Check valid files
     [ image_name , file_name ] = readValidFiles( folder );
-    
+
     % Save valid data in a structure
     for i = 1:1:size( file_name , 2 )
         

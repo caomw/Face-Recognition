@@ -7,7 +7,7 @@ end
 % ********************************************************************* %
 % ********************************************************************* %
 
-function r = normalize( dataStructure , image )
+function r = normalize( dataStructure , image , image_names )
     num = size( dataStructure , 2 );
     
     F = dataStructure;              % temporal
@@ -88,7 +88,7 @@ function r = normalize( dataStructure , image )
     end
 
     %Final average transformation.
-    display(F_average);
+    %display(F_average);
 
     %% Yield affine transformation that maps the face to the 64*64 window
     %image = imread('../all_faces/eric_3.JPG');
@@ -131,13 +131,41 @@ function r = normalize( dataStructure , image )
                 end
             end
         end
-        base = sprintf('%d.jpg', k);
-        imwrite(uint8(new), fullfile(mapped_path, base));   
+        
+        
+        
+        
+        % if the image is in the test_images folder, save the normalized
+        % one to it. 
+        % Otherwise, to the train_images folder
+        cd ../test_images/ %less images to check here
+        
+        % Unify name extension to .jpg
+        base = sprintf( image_names{k} );
+        base = strcat( base( 1 : size( base , 2 ) - 4 ) , '.jpg' );
+        
+        % Saving the images according to its function (train or test)
+        if( exist( image_names{k} , 'file' ) == 2 )
+            %display('train')
+            %image_names{k}
+            imwrite( uint8( new ) , fullfile( '_norm/' , base ) );
+        else
+            %display('test')
+            %image_names{k}
+            imwrite( uint8( new ) , fullfile( '../train_images/_norm/' , base ) );
+        end
+        
+        
+        % going back to the original path
+        cd ../code/
+        
+        
+        
+        
+        %base = sprintf('%d.jpg', k);
+        %base = sprintf( image_names{k} ); 
+        %imwrite(uint8(new), fullfile(mapped_path, base));   
     end
-    
-    
-    checkDisparisty( dataStructure, A , b );
-
 end
 
 function l = checkDisparisty( dataStructure, A , b )
