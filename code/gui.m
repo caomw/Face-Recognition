@@ -6,7 +6,7 @@ function handles = createGui( h_f , h_n , h_p )
     
     % Set the figure (origin at top-left corner)
     hFig = figure( 'NumberTitle' , 'off' , 'Name' , 'Face Recognition' , 'Position' , [500 , 300 , 710 , 450 ] , 'Resize' , 'off' , 'MenuBar' , 'none' );
-
+    
     % Set the description
     description_text = sprintf(' \n  Usage of the software:\n\n    1) ''Browse database'' and ''Process database''\n    2) ''Browse picture'' and ''Identify Person''\n\n  The bottom-right table will list the results of the computation.\n  A gender filter can be applied by selecting the ''Male'' and/or\n  ''Female'' button ');
     description = uicontrol( 'Style' , 'text' , 'String' , description_text , 'HorizontalAlignment' , 'left' , 'Enable' , 'inactive' , 'Position' , [390 315 289 105] );
@@ -86,6 +86,13 @@ function database_browse( source , ~ )
         % Clean the table with the results
         set( h_gui_h.table , 'Data' , zeros(0,3) )
         
+        % Remove the images (overlap it)
+        patch( 150 , 150 , 3 ) = 0;
+        patch(:,:,1)= 204 * ones( 150 );
+        patch(:,:,2)= 204 * ones( 150 );
+        patch(:,:,3)= 204 * ones( 150 );
+        imshow( uint8( patch ) , 'Parent' , axes( 'Units' , 'pixels' , 'Position' , [30 30 150 150] , 'Parent', h_gui_h.hFig ) );
+        imshow( uint8( patch ) , 'Parent' , axes( 'Units' , 'pixels' , 'Position' , [210 30 150 150] , 'Parent', h_gui_h.hFig ) );
     end
 end
 
@@ -133,7 +140,12 @@ function recongnition_browse( source , ~ )
         % Clean the table with the results
         set( h_gui_h.table , 'Data' , zeros(0,3) )
         
-        % If any, remove the output image
+        % Remove the output image (overlap it)
+        patch( 150 , 150 , 3 ) = 0;
+        patch(:,:,1)= 204 * ones( 150 );
+        patch(:,:,2)= 204 * ones( 150 );
+        patch(:,:,3)= 204 * ones( 150 );
+        imshow( uint8( patch ) , 'Parent' , axes( 'Units' , 'pixels' , 'Position' , [210 30 150 150] , 'Parent', h_gui_h.hFig ) );
     end
 end
 
