@@ -2,7 +2,7 @@ function p = pca()
     p.execute = @execute;
 end
 
-function list = execute( path , test_name )
+function [ list , string ] = execute( path , test_name )
 
     I = {};
     D = [];
@@ -111,4 +111,67 @@ function list = execute( path , test_name )
         list{ i , 3 } = 'm / f';
         list{ i , 4 } = files{ Idx(i) };
     end   
+
+
+
+
+    %% Classification for male and female (Naive bayes classifier)
+
+    % label for everyone, male is 1 and female is 2;
+    p = number_pictures;
+    label = ones(1,p);
+    label(1:3) = 2;
+    label(16:18) = 2;
+
+    % prior probability of male and female 
+    p_male = 48/54;
+    p_female = 6/54;
+
+    % Get mean and variance of each dimension of features in order to get the
+    % likelihood probability
+    Male_Matrix = [];
+    Female_Matrix = [];
+    for i = 1 : p
+        if label(i) == 1 
+            Male_Matrix = [Male_Matrix;F{i}];
+        else
+            Female_Matrix = [Female_Matrix; F{i}];
+        end
+    end
+
+    mean_F_male = mean(Male_Matrix);
+    var_F_male = var(Male_Matrix);
+
+    mean_F_female = mean(Female_Matrix);
+    var_F_female = var(Female_Matrix);
+
+
+
+    %% Test classification 
+    Likelihood_male = 1;
+    Likelihood_female = 1;
+
+    % Likelihood should be according to normal distribution
+    for i = 1 : k
+        Likelihood_male = Likelihood_male * (1/sqrt(2 * pi * var_F_male(i))) * exp( -(F_test(i) - mean_F_male(i))^2 / (2 * var_F_male(i)));
+        Likelihood_female = Likelihood_female * (1/sqrt(2 * pi * var_F_female(i))) * exp( -(F_test(i) - mean_F_female(i))^2 / (2 * var_F_female(i)));
+    end
+
+
+    % Compute the bayes posterior probability
+
+    post_male = Likelihood_male * p_male;
+    post_female = Likelihood_female * p_female;
+
+    male = post_male/(post_male + post_female);
+    female = post_female/(post_male + post_female);
+
+    if post_male/post_female > 1
+        %display('boy');
+        string = strcat( 'Looking for a male with a probabilty of' , {' '} , int2str( male * 100 ) , '%' );
+    else
+        %display('girl');
+        string = strcat( 'Looking for a female with a probabilty of' , {' '} , int2str( female * 100 ) , '%' );
+    end
+
 end

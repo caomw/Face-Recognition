@@ -20,22 +20,12 @@ function handles = createGui( h_f , h_n , h_p )
     % Set the pca buttons
     pca_group = uipanel( hFig , 'Units' , 'pixels' , 'Position', [30 195 330 105] );
     pca_browse = uicontrol( 'Style' , 'pushbutton' , 'String' , 'Browse picture' , 'Enable' , 'off' , 'Tag' , 'pca_browse' , 'Units' , 'pixels' , 'Position' , [45 250 120 30] , 'Callback' , @recongnition_browse );
-    pca_execute = uicontrol( 'Style' , 'pushbutton' , 'String' , 'Identify person' , 'Enable' , 'off' , 'Tag' , 'pca' , 'Units' , 'pixels' , 'Position' , [45 210 120 30] , 'Callback' , @recongnition_execute );
-    pca_male = uicontrol( 'Style' , 'radiobutton' , 'String' , 'Male', 'Value' , 1 , 'Position' , [240 251 120 30] );
-    pca_female = uicontrol( 'Style' , 'radiobutton' , 'String' , 'Female', 'Value' , 1 , 'Position' , [240 211 120 30] );
-    
-    % Set the searched image area
-    %im_search = imread( '/Users/ericpairet/Others/VIBOT/1st_semester/Applied mathematics/Homework 3/Face-Recognition/mapped_images/55.jpg' );
-    %ax_search = axes( 'Units' , 'pixels' , 'Position' , [30 30 150 150] , 'Parent', hFig );
-    %ha_search = imshow( im_search , 'Parent' , ax_search );
-    
-    % Set the found image area
-    %im_found = imread( '/Users/ericpairet/Others/VIBOT/1st_semester/Applied mathematics/Homework 3/Face-Recognition/mapped_images/54.jpg' );
-    %ax_found = axes( 'Units' , 'pixels' , 'Position' , [210 30 150 150] , 'Parent', hFig );
-    %ha_found = imshow( im_found , 'Parent' , ax_found );
+    pca_execute = uicontrol( 'Style' , 'pushbutton' , 'String' , 'Identify person' , 'Enable' , 'off' , 'Tag' , 'pca' , 'Units' , 'pixels' , 'Position' , [225 250 120 30] , 'Callback' , @recongnition_execute );
+    gender_text = uicontrol( 'Style' , 'edit' , 'String' , '' , 'Enable' , 'inactive' , 'Position' , [45 210 300 30] );
     
     % Set the table
-    table = uitable( 'Data' , zeros(0,3) , 'ColumnWidth', {50} , 'RowName' , [] , 'ColumnWidth', {60 , 150 , 60} , 'ColumnName' , {'Ranking','Name','Gender'} , 'ColumnEditable' , [false false false] , 'Position' , [390 30 289 270] , 'CellSelectionCallback' , @table_callback );
+    %table = uitable( 'Data' , zeros(0,3) , 'ColumnWidth', {50} , 'RowName' , [] , 'ColumnWidth', {60 , 150 , 60} , 'ColumnName' , {'Ranking','Name','Gender'} , 'ColumnEditable' , [false false false] , 'Position' , [390 30 289 270] , 'CellSelectionCallback' , @table_callback );
+    table = uitable( 'Data' , zeros(0,2) , 'ColumnWidth', {70} , 'RowName' , [] , 'ColumnWidth', {80 , 190} , 'ColumnName' , {'Ranking','Name'} , 'ColumnEditable' , [false false] , 'Position' , [390 30 289 270] , 'CellSelectionCallback' , @table_callback );
     
     % Save the items' handles
     handles = struct( 'hFig' , hFig , ...
@@ -47,8 +37,7 @@ function handles = createGui( h_f , h_n , h_p )
                       'pca_group' , pca_group , ...
                       'pca_browse' , pca_browse , ...
                       'pca_execute' , pca_execute , ...
-                      'pca_male' , pca_male , ...
-                      'pca_female' , pca_female , ...
+                      'gender_text' , gender_text , ...
                       'table' , table );
     
     % Making files handles global to this file
@@ -84,7 +73,10 @@ function database_browse( source , ~ )
         set( h_gui_h.pca_execute , 'Enable' , 'off' );
         
         % Clean the table with the results
-        set( h_gui_h.table , 'Data' , zeros(0,3) )
+        set( h_gui_h.table , 'Data' , zeros(0,3) );
+        
+        % Clean the gender dialog box
+        set( h_gui_h.gender_text , 'String' , '' );
         
         % Remove the images (overlap it)
         patch( 150 , 150 , 3 ) = 0;
@@ -138,7 +130,10 @@ function recongnition_browse( source , ~ )
         set( h_gui_h.pca_execute , 'Enable' , 'on' );
         
         % Clean the table with the results
-        set( h_gui_h.table , 'Data' , zeros(0,3) )
+        set( h_gui_h.table , 'Data' , zeros(0,3) );
+        
+        % Clean the gender dialog box
+        set( h_gui_h.gender_text , 'String' , '' ); 
         
         % Remove the output image (overlap it)
         patch( 150 , 150 , 3 ) = 0;
@@ -158,13 +153,16 @@ function recongnition_execute( source , ~ )                                     
     unknown_image_path = get( h_gui_h.pca_browse , 'UserData' );
 
     % Compute PCA
-    list = h_pca.execute( '../train_images/_norm/' , unknown_image_path );
+    [ list , string ] = h_pca.execute( '../train_images/_norm/' , unknown_image_path );
     
     % Save file names of the result
-    set( source , 'UserData' , list( : , 4 ) )
+    set( source , 'UserData' , list( : , 4 ) );
     
     % Fill the table with the results
-    set( h_gui_h.table , 'Data' , list( : , 1 : 3 ) );
+    set( h_gui_h.table , 'Data' , list( : , 1 : 2 ) );
+    
+    % Fill the gender dialog box
+    set( h_gui_h.gender_text , 'String' , string ); 
     
     % Building path
     image_path = strcat( '../train_images/_norm/' , list{ 1 , 4 } );
