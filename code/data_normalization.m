@@ -113,7 +113,7 @@ function r = normalize( dataStructure , image , image_names )
 
     % Compute the inverse transformation
 
-    mapped_path = '../mapped_images/';
+    mapped_path = 'mapped_images/';
     for k = 1 : num
 
         new = zeros(64,64,3);
@@ -138,7 +138,7 @@ function r = normalize( dataStructure , image , image_names )
         % if the image is in the test_images folder, save the normalized
         % one to it. 
         % Otherwise, to the train_images folder
-        cd ../test_images/ %less images to check here
+        cd test_images/ %less images to check here
         
         % Unify name extension to .jpg
         base = sprintf( image_names{k} );
@@ -157,7 +157,7 @@ function r = normalize( dataStructure , image , image_names )
         
         
         % going back to the original path
-        cd ../code/
+        cd ../
         
         
         

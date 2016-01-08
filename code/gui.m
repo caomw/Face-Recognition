@@ -54,7 +54,7 @@ function database_browse( source , ~ )
     global h_gui_h;
     
     % Popup
-    train_dir = uigetdir( '../all_faces' , 'Select database' );
+    train_dir = uigetdir( 'all_faces' , 'Select database' );
     
     % If the path is correct
     if( train_dir ~= 0 )                                                        % Check if the database is ok, not empty,...
@@ -114,7 +114,7 @@ function recongnition_browse( source , ~ )
     global h_gui_h;
 
     % Popup
-    [FileName , PathName , ~] = uigetfile( {'*.jpg;*.JPG;'} , 'Select image' , '../test_images' );          %Should it limit only validated images? (bug!)
+    [FileName , PathName , ~] = uigetfile( {'*.jpg;*.JPG;'} , 'Select image' , 'test_images' );          %Should it limit only validated images? (bug!)
     
     % If the path is correct
     if( FileName ~= 0 )
@@ -153,7 +153,7 @@ function recongnition_execute( source , ~ )                                     
     unknown_image_path = get( h_gui_h.pca_browse , 'UserData' );
 
     % Compute PCA
-    [ list , string ] = h_pca.execute( '../train_images/_norm/' , unknown_image_path );
+    [ list , string ] = h_pca.execute( 'train_images/_norm/' , unknown_image_path );
     
     % Save file names of the result
     set( source , 'UserData' , list( : , 4 ) );
@@ -165,7 +165,7 @@ function recongnition_execute( source , ~ )                                     
     set( h_gui_h.gender_text , 'String' , string ); 
     
     % Building path
-    image_path = strcat( '../train_images/_norm/' , list{ 1 , 4 } );
+    image_path = strcat( 'train_images/_norm/' , list{ 1 , 4 } );
     
     % Show the selected image in the GUI
     imshow( imread( image_path ) , 'Parent' , axes( 'Units' , 'pixels' , 'Position' , [210 30 150 150] , 'Parent', h_gui_h.hFig ) );
@@ -185,7 +185,7 @@ function table_callback( ~ , eventData )
         list = get( h_gui_h.pca_execute , 'UserData' );
 
         % Building path
-        image_path = strcat( '../train_images/_norm/' , list{ row } );
+        image_path = strcat( 'train_images/_norm/' , list{ row } );
 
         % Show the selected image in the GUI
         imshow( imread( image_path ) , 'Parent' , axes( 'Units' , 'pixels' , 'Position' , [210 30 150 150] , 'Parent', h_gui_h.hFig ) );
