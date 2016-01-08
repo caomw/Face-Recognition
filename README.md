@@ -1,3 +1,3 @@
-# Face-Recognition
+This is the face recognition project done by Songyou Peng (psy920710@gmail.com) and Èric Pairet Artau (ericpairet@gmail.com}. 
 
-By Songyou Peng and Èric Pairet Artau
+For further documentation about how to use the Matlab software, please check the report.

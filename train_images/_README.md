@@ -1,0 +1,1 @@
+In this folder, all the images of the identified people should be saved, this is to say, the used database to identify the images in /test_images folder. In our project, three pictures for classmate.

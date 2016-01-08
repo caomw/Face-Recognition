@@ -1,0 +1,1 @@
+In this folder, all the images of the non identified people should be saved. In our project, two pictures for classmate.
