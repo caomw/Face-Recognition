@@ -1,0 +1,1 @@
+In this folder, all the images included in the /test_images and the /train_images folders have to be copied. Each one has to have its correspondent text file with all the face features.
