@@ -10,10 +10,6 @@ clc;
 
 % Include path to the other files
 addpath('code/');
-%addpath('../code/data_normalization');
-%addpath('/code/files_management');
-%addpath('/code/gui');
-%addpath('/code/pca');
 
 % Handler for the different files
 h_normalization = data_normalization;
